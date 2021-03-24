@@ -58,7 +58,7 @@ const loadBlockChainData = async (
 
     const guessContract = await new web3.eth.Contract(
       GuessABI,
-      "0x728Ec084D4012A59ED02ac3c8d577AB96a355705"
+      "0x1e22999Fe0e7EF977Cb195F42E3a7a512f599A12"
     );
     await setTokenContract(tokenContract);
 
@@ -114,7 +114,7 @@ const accountDetails = async (account, userData, setUserData, setLoading) => {
 
     const guessContract = await new web3.eth.Contract(
       GuessABI,
-      "0x728Ec084D4012A59ED02ac3c8d577AB96a355705"
+      "0x1e22999Fe0e7EF977Cb195F42E3a7a512f599A12"
     );
 
     const stochBalance = await tokenContract.methods
@@ -138,9 +138,21 @@ const accountDetails = async (account, userData, setUserData, setLoading) => {
     const totalTokenStakedInContract = await guessContract.methods
       .totalTokenStakedInContract()
       .call({ from: account });
-    const winnerTokens = await guessContract.methods
+    const winnerTokensReceived = await guessContract.methods
       .winnerTokens()
       .call({ from: account });
+    const lastWinsTime = await guessContract.methods
+      .lastWinsTime()
+      .call({ from: account });  
+    // const checkRandomNumber = await guessContract.methods
+    //   .checkRandomNumber()
+    //   .call({ from: account })
+    //   .on('receipt', (receipt) => {
+    //     console.log(receipt)
+    //   });
+    const calculateCurrentTokenAmount = await guessContract.methods
+      .calculateCurrentTokenAmount()
+      .call({ from: account });    
 
     await setUserData({
       ...userData,
@@ -151,7 +163,10 @@ const accountDetails = async (account, userData, setUserData, setLoading) => {
       checkStakingBalance: checkStakingBalance,
       viewNumbersSelected: viewNumbersSelected,
       totalTokenStakedInContract: totalTokenStakedInContract,
-      winnerTokens: winnerTokens,
+      winnerTokensReceived: winnerTokensReceived,
+      lastWinsTime: lastWinsTime,
+      // checkRandomNumber: checkRandomNumber,
+      calculateCurrentTokenAmount: calculateCurrentTokenAmount
     });
 
     setLoading(false);
@@ -569,7 +584,7 @@ const approveFunction = async (
 
     setError(false);
     await tokenContract.methods
-      .approve("0x728Ec084D4012A59ED02ac3c8d577AB96a355705", tokens)
+      .approve("0x1e22999Fe0e7EF977Cb195F42E3a7a512f599A12", tokens)
       .send({ from: account })
       .on("transactionHash", async () => {
         await setModalShow(false);

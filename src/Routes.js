@@ -28,8 +28,11 @@ export default function Routes() {
     isUserStaking: false,
     checkStakingBalance: 0,
     viewNumbersSelected: [],
-    winnerTokens: 0,
+    winnerTokensReceived: 0,
     totalTokenStakedInContract: 0,
+    lastWinsTime:"",
+    checkRandomNumber:"",
+    calculateCurrentTokenAmount:0
   });
 
   useEffect(() => {

@@ -163,22 +163,22 @@ export default function Main() {
                 
                 <div className="col-md-2-5 mb-5">
                   <div className="ds_bx_wt">
-                    <h6>Rewards</h6>
-                    <h3>{userData.winnerTokens}</h3>
+                    <h6>Expected Rewards</h6>
+                    <h3>{userData.calculateCurrentTokenAmount}</h3>
                   </div>
                 </div>
 
                 <div className="col-md-4-5 mb-5">
                   <div className="ds_bx_wt">
-                    <h6>XXXXX</h6>
-                    <h3>00000</h3>
+                    <h6>Last Game Winner Number</h6>
+                    <h3>{userData.checkRandomNumber || 'Not Selected'}</h3>
                   </div>
                 </div>
 
                 <div className="col-md-4-5 mb-5">
                   <div className="ds_bx_wt">
-                    <h6>YYYYY</h6>
-                    <h3>00000</h3>
+                    <h6>Last Game Time</h6>
+                    <h3>{(new Date(userData.lastWinsTime * 1000)).toLocaleString()}</h3>
                   </div>
                 </div>
 
