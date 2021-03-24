@@ -4,13 +4,13 @@ import "../../css/style.css";
 import StakeModal from "./StakeModal";
 import ApproveModal from "./ApproveModal";
 import { UserContext } from "../../Context/UserContext";
-import { stakeTokens, unstakeTokens, approveFunction } from "../../Functions/Web3";
+import { stakeTokens, unstakeTokens, approveFunction, checkLastRandomNumber} from "../../Functions/Web3";
 import { firebaseinit } from "../../FirebaseAuth";
 
 const db = firebaseinit.database().ref("Data/Users");
 
 export default function Main() {
-  const { userData, account, guessContract } = useContext(UserContext);
+  const { userData, setUserData, account, guessContract } = useContext(UserContext);
   const [transactions, setTransactions] = useState({});
   const [approvedAmount, setApprovedAmount] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -164,14 +164,15 @@ export default function Main() {
                 <div className="col-md-2-5 mb-5">
                   <div className="ds_bx_wt">
                     <h6>Expected Rewards</h6>
-                    <h3>{userData.calculateCurrentTokenAmount}</h3>
+                    <h3>{parseFloat((userData.calculateCurrentTokenAmount / 10 ** 18).toString()).toFixed(2)}</h3>
                   </div>
                 </div>
 
                 <div className="col-md-4-5 mb-5">
                   <div className="ds_bx_wt">
                     <h6>Last Game Winner Number</h6>
-                    <h3>{userData.checkRandomNumber || 'Not Selected'}</h3>
+                    <h3>{userData.checkRandomNumber }</h3>
+                    <button className="btn btn_blck" onClick={() => checkLastRandomNumber(userData, setUserData, account, guessContract)}>View</button>
                   </div>
                 </div>
 

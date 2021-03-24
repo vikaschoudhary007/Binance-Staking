@@ -28,10 +28,9 @@ export default function Routes() {
     isUserStaking: false,
     checkStakingBalance: 0,
     viewNumbersSelected: [],
-    winnerTokensReceived: 0,
     totalTokenStakedInContract: 0,
     lastWinsTime:"",
-    checkRandomNumber:"",
+    checkRandomNumber:'Not Selected',
     calculateCurrentTokenAmount:0
   });
 
@@ -116,6 +115,7 @@ export default function Routes() {
         handleConnect,
         userData,
         loading,
+        setUserData
       }}
     >
       <Router>

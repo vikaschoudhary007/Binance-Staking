@@ -138,18 +138,10 @@ const accountDetails = async (account, userData, setUserData, setLoading) => {
     const totalTokenStakedInContract = await guessContract.methods
       .totalTokenStakedInContract()
       .call({ from: account });
-    const winnerTokensReceived = await guessContract.methods
-      .winnerTokens()
-      .call({ from: account });
     const lastWinsTime = await guessContract.methods
       .lastWinsTime()
       .call({ from: account });  
-    // const checkRandomNumber = await guessContract.methods
-    //   .checkRandomNumber()
-    //   .call({ from: account })
-    //   .on('receipt', (receipt) => {
-    //     console.log(receipt)
-    //   });
+
     const calculateCurrentTokenAmount = await guessContract.methods
       .calculateCurrentTokenAmount()
       .call({ from: account });    
@@ -163,9 +155,7 @@ const accountDetails = async (account, userData, setUserData, setLoading) => {
       checkStakingBalance: checkStakingBalance,
       viewNumbersSelected: viewNumbersSelected,
       totalTokenStakedInContract: totalTokenStakedInContract,
-      winnerTokensReceived: winnerTokensReceived,
       lastWinsTime: lastWinsTime,
-      // checkRandomNumber: checkRandomNumber,
       calculateCurrentTokenAmount: calculateCurrentTokenAmount
     });
 
@@ -695,6 +685,19 @@ const approveFunction = async (
   }
 };
 
+const checkLastRandomNumber = async(userData, setUserData, account, guessContract) => {
+
+  try{
+    const checkRandomNumber = await guessContract.methods.checkRandomNumber().call({ from:account });
+    await setUserData({
+      ...userData,
+      checkRandomNumber: checkRandomNumber
+    });
+  }catch(err){
+    console.log(err);
+  }
+}
+
 export {
   loadWeb3,
   loadBlockChainData,
@@ -705,4 +708,5 @@ export {
   stakeTokens,
   unstakeTokens,
   approveFunction,
+  checkLastRandomNumber
 };
