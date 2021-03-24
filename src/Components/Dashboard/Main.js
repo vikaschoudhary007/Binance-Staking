@@ -148,7 +148,7 @@ export default function Main() {
                 </div>
                 <div className="col-md-2-5 mb-5">
                   <div className="ds_bx_wt">
-                    <h6>Running $STOCH in Pool</h6>
+                    <h6>Running STOCH in Pool</h6>
                     <h3>{userData.totalTokenStakedInContract}</h3>
                   </div>
                 </div>

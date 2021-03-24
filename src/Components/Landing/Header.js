@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React from "react";
 import "../../css/bootstrap.min.css";
 import "../../css/style.css";
 import logo from "../../images/logo.svg";
@@ -7,7 +7,7 @@ import {UserContext} from "../../Context/UserContext"
 
 export default function Header() {
 
-  const { connectTag, handleConnect } = useContext(UserContext);
+  // const { connectTag, handleConnect } = useContext(UserContext);
 
   return (
     <div>
