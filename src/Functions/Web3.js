@@ -1,11 +1,11 @@
-import Web3 from "web3";
-import TokenABI from "../Contract/Token.json";
-import GuessABI from "../Contract/GuessContract.json";
-import { firebaseinit } from "../FirebaseAuth";
-import Swal from "sweetalert2";
+import Web3 from 'web3';
+import TokenABI from '../Contract/Token.json';
+import GuessABI from '../Contract/GuessContract.json';
+import { firebaseinit } from '../FirebaseAuth';
+import Swal from 'sweetalert2';
 
-const db = firebaseinit.database().ref("Data");
-const userdb = firebaseinit.database().ref("Data/Users");
+const db = firebaseinit.database().ref('Data');
+const userdb = firebaseinit.database().ref('Data/Users');
 
 /////////// CHECK IF BROWSER IS ENABLED WITH Web3 //////////////
 
@@ -20,7 +20,7 @@ const loadWeb3 = async () => {
       // window.alert('Non-Ethereum browser detected. you should consider trying MetaMask')
     }
   } catch (err) {
-    console.log("error", err);
+    console.log('error', err);
   }
 };
 
@@ -39,11 +39,11 @@ const loadBlockChainData = async (
     const accounts = await web3.eth.getAccounts();
 
     await setAccount(accounts[0]);
-    localStorage.account = accounts[0] || "";
+    localStorage.account = accounts[0] || '';
 
     setConnectTag(
       localStorage.account.slice(0, 4) +
-        "..." +
+        '...' +
         localStorage.account.slice(38, 42)
     );
 
@@ -53,12 +53,12 @@ const loadBlockChainData = async (
     localStorage.networkId = networkId;
     const tokenContract = await new web3.eth.Contract(
       TokenABI,
-      "0x7Ed44F825a897eb06BA33Fdd71695884D43DebFC"
+      '0x7Ed44F825a897eb06BA33Fdd71695884D43DebFC'
     );
 
     const guessContract = await new web3.eth.Contract(
       GuessABI,
-      "0x1e22999Fe0e7EF977Cb195F42E3a7a512f599A12"
+      '0x1e22999Fe0e7EF977Cb195F42E3a7a512f599A12'
     );
     await setTokenContract(tokenContract);
 
@@ -73,14 +73,14 @@ const loadBlockChainData = async (
 const listenAccountChange = async (setAccount, setConnectTag) => {
   try {
     const web3 = window.web3;
-    window.ethereum.on("accountsChanged", async () => {
+    window.ethereum.on('accountsChanged', async () => {
       const accounts = await web3.eth.getAccounts();
       await setAccount(accounts[0]);
-      localStorage.account = accounts[0] || "";
+      localStorage.account = accounts[0] || '';
 
       setConnectTag(
         localStorage.account.slice(0, 4) +
-          "..." +
+          '...' +
           localStorage.account.slice(39, 42)
       );
     });
@@ -93,7 +93,7 @@ const listenAccountChange = async (setAccount, setConnectTag) => {
 
 const listenNetworkChange = async (setNetworkId) => {
   const web3 = window.web3;
-  window.ethereum.on("networkChanged", async () => {
+  window.ethereum.on('networkChanged', async () => {
     const networkId = await web3.eth.net.getId();
     await setNetworkId(networkId);
     localStorage.networkId = networkId;
@@ -109,12 +109,12 @@ const accountDetails = async (account, userData, setUserData, setLoading) => {
 
     const tokenContract = await new web3.eth.Contract(
       TokenABI,
-      "0x7Ed44F825a897eb06BA33Fdd71695884D43DebFC"
+      '0x7Ed44F825a897eb06BA33Fdd71695884D43DebFC'
     );
 
     const guessContract = await new web3.eth.Contract(
       GuessABI,
-      "0x1e22999Fe0e7EF977Cb195F42E3a7a512f599A12"
+      '0x1e22999Fe0e7EF977Cb195F42E3a7a512f599A12'
     );
 
     const stochBalance = await tokenContract.methods
@@ -140,11 +140,11 @@ const accountDetails = async (account, userData, setUserData, setLoading) => {
       .call({ from: account });
     const lastWinsTime = await guessContract.methods
       .lastWinsTime()
-      .call({ from: account });  
+      .call({ from: account });
 
     const calculateCurrentTokenAmount = await guessContract.methods
       .calculateCurrentTokenAmount()
-      .call({ from: account });    
+      .call({ from: account });
 
     await setUserData({
       ...userData,
@@ -156,7 +156,7 @@ const accountDetails = async (account, userData, setUserData, setLoading) => {
       viewNumbersSelected: viewNumbersSelected,
       totalTokenStakedInContract: totalTokenStakedInContract,
       lastWinsTime: lastWinsTime,
-      calculateCurrentTokenAmount: calculateCurrentTokenAmount
+      calculateCurrentTokenAmount: calculateCurrentTokenAmount,
     });
 
     setLoading(false);
@@ -175,67 +175,65 @@ const chooseNumbers = async (
   setCheckboxId
 ) => {
   try {
-
     await guessContract.methods
       .chooseNumbers(dataArray)
       .send({ from: account })
-      .on('transactionHash', async() => { 
+      .on('transactionHash', async () => {
         Swal.fire({
-          title: "Transaction Processing...",
-          text: "Please Wait",
+          title: 'Transaction Processing...',
+          text: 'Please Wait',
           showConfirmButton: false,
           showCloseButton: false,
-          icon: "info",
+          icon: 'info',
           customClass: {
-            confirmButton: 'swal-button'
+            confirmButton: 'swal-button',
           },
-          allowOutsideClick:false,
-          buttonsStyling:false
+          allowOutsideClick: false,
+          buttonsStyling: false,
         });
-        
       });
 
-    await db.once("value", async (snapshot) => {
+    await db.once('value', async (snapshot) => {
       const data = snapshot.val().ChoosedArray;
       await db.update({
         ChoosedArray: data.concat(dataArray),
       });
     });
 
-    await userdb.once("value", async (snapshot) => {
+    await userdb.once('value', async (snapshot) => {
       const temp = snapshot.val();
 
       let countValue;
       if (temp == null) {
-        await userdb.child(account).child("Transactions").set({
+        await userdb.child(account).child('Transactions').set({
           count: 0,
         });
 
         await userdb
           .child(account)
-          .child("Transactions/count")
-          .once("value", async (result) => {
+          .child('Transactions/count')
+          .once('value', async (result) => {
             countValue = result.val();
             console.log(countValue);
           });
       }
       await userdb
         .child(account)
-        .child("Transactions/count")
-        .once("value", async (result) => {
+        .child('Transactions/count')
+        .once('value', async (result) => {
           countValue = result.val();
           console.log(countValue);
         });
 
       if (countValue === null) {
-        await userdb.child(account).child("Transactions").set({
+        await userdb.child(account).child('Transactions').set({
           count: 0,
         });
 
         await userdb
           .child(account)
-          .child("Transactions/count")
-          .once("value", async (result) => {
+          .child('Transactions/count')
+          .once('value', async (result) => {
             countValue = result.val();
             console.log(countValue);
           });
@@ -243,32 +241,31 @@ const chooseNumbers = async (
 
       await userdb
         .child(account)
-        .child("Transactions")
+        .child('Transactions')
         .child(countValue)
         .update({
           date: new Date().toISOString().slice(0, 10),
           choosenNumber: dataArray,
-          type: "CHOOSE NUMBER",
+          type: 'CHOOSE NUMBER',
         })
         .then(async () => {
           await userdb
             .child(account)
-            .child("Transactions")
-            .child("count")
+            .child('Transactions')
+            .child('count')
             .set(countValue + 1)
             .then(() => {
               Swal.fire({
-                title: "Transaction Successful",
+                title: 'Transaction Successful',
                 showConfirmButton: true,
                 showCloseButton: false,
-                confirmButtonText:"Close",
-                icon: "success",
+                confirmButtonText: 'Close',
+                icon: 'success',
                 customClass: {
-                  confirmButton: 'swal-button'
+                  confirmButton: 'swal-button',
                 },
-                buttonsStyling:false
-              })
-              .then(() => {
+                buttonsStyling: false,
+              }).then(() => {
                 setSelectedGuesses([]);
                 setCheckboxId(new Map());
               });
@@ -277,15 +274,15 @@ const chooseNumbers = async (
     });
   } catch (err) {
     Swal.fire({
-      title: "Oops! Transaction Failed",
+      title: 'Oops! Transaction Failed',
       showConfirmButton: true,
       showCloseButton: false,
-      confirmButtonText: "Close",
-      icon: "error",
+      confirmButtonText: 'Close',
+      icon: 'error',
       customClass: {
-        confirmButton: 'swal-button'
+        confirmButton: 'swal-button',
       },
-      buttonsStyling:false
+      buttonsStyling: false,
     });
   }
 };
@@ -306,8 +303,8 @@ const stakeTokens = async (
 
     await userdb
       .child(account)
-      .child("approveAmount")
-      .once("value", (snapshot) => {
+      .child('approveAmount')
+      .once('value', (snapshot) => {
         if (snapshot.val() === null) {
           approved = false;
         }
@@ -315,16 +312,16 @@ const stakeTokens = async (
 
     if (approved === false) {
       Swal.fire({
-        title: "You need to approve first",
+        title: 'You need to approve first',
         showConfirmButton: true,
         showCloseButton: false,
-        confirmButtonText:"Close",
-        icon: "error",
+        confirmButtonText: 'Close',
+        icon: 'error',
         customClass: {
-          confirmButton: 'swal-button'
+          confirmButton: 'swal-button',
         },
-        buttonsStyling:false
-      })
+        buttonsStyling: false,
+      });
       setValue(0);
       setModalShow(false);
 
@@ -336,60 +333,61 @@ const stakeTokens = async (
       return;
     }
     console.log(tokens);
-    await guessContract.methods.stakeTokens(tokens).send({ from: account })
-    .on('transactionHash', async() => { 
-      await setModalShow(false)
-      Swal.fire({
-        title: "Transaction Processing...",
-        text: "Please Wait",
-        showConfirmButton: false,
-        showCloseButton: false,
-        icon: "info",
-        customClass: {
-          confirmButton: 'swal-button'
-        },
-        allowOutsideClick:false,
-        buttonsStyling:false
+    await guessContract.methods
+      .stakeTokens(tokens)
+      .send({ from: account })
+      .on('transactionHash', async () => {
+        await setModalShow(false);
+        Swal.fire({
+          title: 'Transaction Processing...',
+          text: 'Please Wait',
+          showConfirmButton: false,
+          showCloseButton: false,
+          icon: 'info',
+          customClass: {
+            confirmButton: 'swal-button',
+          },
+          allowOutsideClick: false,
+          buttonsStyling: false,
+        });
       });
-      
-    });
 
     setError(false);
 
-    await userdb.once("value", async (snapshot) => {
+    await userdb.once('value', async (snapshot) => {
       const temp = snapshot.val();
 
       let countValue;
       if (temp == null) {
-        await userdb.child(account).child("Transactions").set({
+        await userdb.child(account).child('Transactions').set({
           count: 0,
         });
 
         await userdb
           .child(account)
-          .child("Transactions/count")
-          .once("value", async (result) => {
+          .child('Transactions/count')
+          .once('value', async (result) => {
             countValue = result.val();
             console.log(countValue);
           });
       }
       await userdb
         .child(account)
-        .child("Transactions/count")
-        .once("value", async (result) => {
+        .child('Transactions/count')
+        .once('value', async (result) => {
           countValue = result.val();
           console.log(countValue);
         });
 
       if (countValue === null) {
-        await userdb.child(account).child("Transactions").set({
+        await userdb.child(account).child('Transactions').set({
           count: 0,
         });
 
         await userdb
           .child(account)
-          .child("Transactions/count")
-          .once("value", async (result) => {
+          .child('Transactions/count')
+          .once('value', async (result) => {
             countValue = result.val();
             console.log(countValue);
           });
@@ -397,31 +395,31 @@ const stakeTokens = async (
 
       await userdb
         .child(account)
-        .child("Transactions")
+        .child('Transactions')
         .child(countValue)
         .update({
           date: new Date().toISOString().slice(0, 10),
           stakingAmount: amount,
-          type: "STAKE",
+          type: 'STAKE',
         })
         .then(async () => {
           await userdb
             .child(account)
-            .child("Transactions")
-            .child("count")
+            .child('Transactions')
+            .child('count')
             .set(countValue + 1)
             .then(() => {
               setValue(0);
               Swal.fire({
-                title: "Transaction Successful",
+                title: 'Transaction Successful',
                 showConfirmButton: true,
                 showCloseButton: false,
-                confirmButtonText:"Close",
-                icon: "success",
+                confirmButtonText: 'Close',
+                icon: 'success',
                 customClass: {
-                  confirmButton: 'swal-button'
+                  confirmButton: 'swal-button',
                 },
-                buttonsStyling:false
+                buttonsStyling: false,
               });
               setModalShow(false);
             });
@@ -429,15 +427,15 @@ const stakeTokens = async (
     });
   } catch (err) {
     Swal.fire({
-      title: "Oops! Transaction Failed",
+      title: 'Oops! Transaction Failed',
       showConfirmButton: true,
       showCloseButton: false,
-      confirmButtonText: "Close",
-      icon: "error",
+      confirmButtonText: 'Close',
+      icon: 'error',
       customClass: {
-        confirmButton: 'swal-button'
+        confirmButton: 'swal-button',
       },
-      buttonsStyling:false
+      buttonsStyling: false,
     });
     setValue(0);
     setModalShow(false);
@@ -452,57 +450,56 @@ const unstakeTokens = async (guessContract, account) => {
     await guessContract.methods
       .unstakeTokens()
       .send({ from: account })
-      .on("transactionHash", async () => {
-
+      .on('transactionHash', async () => {
         Swal.fire({
-          title: "Transaction Processing...",
-          text: "Please Wait",
+          title: 'Transaction Processing...',
+          text: 'Please Wait',
           showConfirmButton: false,
           showCloseButton: false,
-          icon: "info",
+          icon: 'info',
           customClass: {
-            confirmButton: 'swal-button'
+            confirmButton: 'swal-button',
           },
-          allowOutsideClick:false,
-          buttonsStyling:false
+          allowOutsideClick: false,
+          buttonsStyling: false,
         });
       });
 
-    await userdb.once("value", async (snapshot) => {
+    await userdb.once('value', async (snapshot) => {
       const temp = snapshot.val();
-      console.log("vikas", temp);
+      console.log('vikas', temp);
 
       let countValue;
       if (temp == null) {
-        await userdb.child(account).child("Transactions").set({
+        await userdb.child(account).child('Transactions').set({
           count: 0,
         });
 
         await userdb
           .child(account)
-          .child("Transactions/count")
-          .once("value", async (result) => {
+          .child('Transactions/count')
+          .once('value', async (result) => {
             countValue = result.val();
             console.log(countValue);
           });
       }
       await userdb
         .child(account)
-        .child("Transactions/count")
-        .once("value", async (result) => {
+        .child('Transactions/count')
+        .once('value', async (result) => {
           countValue = result.val();
           console.log(countValue);
         });
 
       if (countValue === null) {
-        await userdb.child(account).child("Transactions").set({
+        await userdb.child(account).child('Transactions').set({
           count: 0,
         });
 
         await userdb
           .child(account)
-          .child("Transactions/count")
-          .once("value", async (result) => {
+          .child('Transactions/count')
+          .once('value', async (result) => {
             countValue = result.val();
             console.log(countValue);
           });
@@ -510,29 +507,29 @@ const unstakeTokens = async (guessContract, account) => {
 
       await userdb
         .child(account)
-        .child("Transactions")
+        .child('Transactions')
         .child(countValue)
         .update({
           date: new Date().toISOString().slice(0, 10),
-          type: "UNSTAKE",
+          type: 'UNSTAKE',
         })
         .then(async () => {
           await userdb
             .child(account)
-            .child("Transactions")
-            .child("count")
+            .child('Transactions')
+            .child('count')
             .set(countValue + 1)
             .then(() => {
               Swal.fire({
-                title: "Transaction Successful",
+                title: 'Transaction Successful',
                 showConfirmButton: true,
                 showCloseButton: false,
-                confirmButtonText:"Close",
-                icon: "success",
+                confirmButtonText: 'Close',
+                icon: 'success',
                 customClass: {
-                  confirmButton: 'swal-button'
+                  confirmButton: 'swal-button',
                 },
-                buttonsStyling:false
+                buttonsStyling: false,
               });
             });
         });
@@ -541,15 +538,15 @@ const unstakeTokens = async (guessContract, account) => {
     // window.location.reload();
   } catch (err) {
     Swal.fire({
-      title: "Oops! Transaction Failed",
+      title: 'Oops! Transaction Failed',
       showConfirmButton: true,
       showCloseButton: false,
-      confirmButtonText: "Close",
-      icon: "error",
+      confirmButtonText: 'Close',
+      icon: 'error',
       customClass: {
-        confirmButton: 'swal-button'
+        confirmButton: 'swal-button',
       },
-      buttonsStyling:false
+      buttonsStyling: false,
     });
   }
 };
@@ -565,7 +562,7 @@ const approveFunction = async (
   try {
     const web3 = window.web3;
 
-    const tokens = web3.utils.toWei(amount.toString(), "ether").toString();
+    const tokens = web3.utils.toWei(amount.toString(), 'ether').toString();
 
     if (amount === 0) {
       setError(true);
@@ -574,59 +571,59 @@ const approveFunction = async (
 
     setError(false);
     await tokenContract.methods
-      .approve("0x1e22999Fe0e7EF977Cb195F42E3a7a512f599A12", tokens)
+      .approve('0x1e22999Fe0e7EF977Cb195F42E3a7a512f599A12', tokens)
       .send({ from: account })
-      .on("transactionHash", async () => {
+      .on('transactionHash', async () => {
         await setModalShow(false);
         Swal.fire({
-          title: "Transaction Processing...",
-          text: "Please Wait",
+          title: 'Transaction Processing...',
+          text: 'Please Wait',
           showConfirmButton: false,
           showCloseButton: false,
-          icon: "info",
+          icon: 'info',
           customClass: {
-            confirmButton: 'swal-button'
+            confirmButton: 'swal-button',
           },
-          allowOutsideClick:false,
-          buttonsStyling:false
+          allowOutsideClick: false,
+          buttonsStyling: false,
         });
       });
 
-    await userdb.once("value", async (snapshot) => {
+    await userdb.once('value', async (snapshot) => {
       const temp = snapshot.val();
-      console.log("vikas", temp);
+      console.log('vikas', temp);
 
       let countValue;
       if (temp == null) {
-        await userdb.child(account).child("Transactions").set({
+        await userdb.child(account).child('Transactions').set({
           count: 0,
         });
 
         await userdb
           .child(account)
-          .child("Transactions/count")
-          .once("value", async (result) => {
+          .child('Transactions/count')
+          .once('value', async (result) => {
             countValue = result.val();
             console.log(countValue);
           });
       }
       await userdb
         .child(account)
-        .child("Transactions/count")
-        .once("value", async (result) => {
+        .child('Transactions/count')
+        .once('value', async (result) => {
           countValue = result.val();
           console.log(countValue);
         });
 
       if (countValue === null) {
-        await userdb.child(account).child("Transactions").set({
+        await userdb.child(account).child('Transactions').set({
           count: 0,
         });
 
         await userdb
           .child(account)
-          .child("Transactions/count")
-          .once("value", async (result) => {
+          .child('Transactions/count')
+          .once('value', async (result) => {
             countValue = result.val();
             console.log(countValue);
           });
@@ -638,46 +635,46 @@ const approveFunction = async (
 
       await userdb
         .child(account)
-        .child("Transactions")
+        .child('Transactions')
         .child(countValue)
         .update({
           date: new Date().toISOString().slice(0, 10),
           approveAmount: amount,
-          type: "APPROVE",
+          type: 'APPROVE',
         })
         .then(async () => {
           await userdb
             .child(account)
-            .child("Transactions")
-            .child("count")
+            .child('Transactions')
+            .child('count')
             .set(countValue + 1)
             .then(async () => {
               await setValue(0);
               Swal.fire({
-                title: "Transaction Successful",
+                title: 'Transaction Successful',
                 showConfirmButton: true,
                 showCloseButton: false,
-                confirmButtonText: "Close",
-                icon: "success",
+                confirmButtonText: 'Close',
+                icon: 'success',
                 customClass: {
-                  confirmButton: 'swal-button'
+                  confirmButton: 'swal-button',
                 },
-                buttonsStyling:false
+                buttonsStyling: false,
               });
             });
         });
     });
   } catch (err) {
     Swal.fire({
-      title: "Oops! Transaction Failed",
+      title: 'Oops! Transaction Failed',
       showConfirmButton: true,
       showCloseButton: false,
-      confirmButtonText: "Close",
-      icon: "error",
+      confirmButtonText: 'Close',
+      icon: 'error',
       customClass: {
-        confirmButton: 'swal-button'
+        confirmButton: 'swal-button',
       },
-      buttonsStyling:false
+      buttonsStyling: false,
     });
     setValue(0);
     setModalShow(false);
@@ -685,18 +682,142 @@ const approveFunction = async (
   }
 };
 
-const checkLastRandomNumber = async(userData, setUserData, account, guessContract) => {
-
-  try{
-    const checkRandomNumber = await guessContract.methods.checkRandomNumber().call({ from:account });
-    await setUserData({
-      ...userData,
-      checkRandomNumber: checkRandomNumber
-    });
-  }catch(err){
+const checkLastRandomNumber = async (
+  setCheckRandomNumber,
+  account,
+  guessContract
+) => {
+  try {
+    const checkRandomNumber = await guessContract.methods
+      .checkRandomNumber()
+      .call({ from: account });
+    await setCheckRandomNumber(checkRandomNumber);
+  } catch (err) {
     console.log(err);
   }
-}
+};
+
+/////////////////////////// ADMIN FUNCTIONS ///////////////////////////////////
+
+const guessRandomNumber = async (
+  guessContract,
+  account,
+  userProvidedSeed,
+  setValue
+) => {
+  try {
+    console.log(userProvidedSeed);
+    if (userProvidedSeed === '') {
+      Swal.fire({
+        title: 'Please Enter Seed First',
+        showConfirmButton: true,
+        showCloseButton: false,
+        icon: 'error',
+        customClass: {
+          confirmButton: 'swal-button',
+        },
+        buttonsStyling: false,
+      });
+      setValue('');
+
+      return;
+    }
+
+    await guessContract.methods
+      .guessRandomNumber(userProvidedSeed)
+      .send({
+        from: account,
+      })
+      .on('transactionHash', async () => {
+        Swal.fire({
+          title: 'Transaction Processing...',
+          text: 'Please Wait',
+          showConfirmButton: false,
+          showCloseButton: false,
+          icon: 'info',
+          customClass: {
+            confirmButton: 'swal-button',
+          },
+          allowOutsideClick: false,
+          buttonsStyling: false,
+        });
+      });
+
+    await setValue('');
+    Swal.fire({
+      title: 'Transaction Successful',
+      showConfirmButton: true,
+      showCloseButton: false,
+      confirmButtonText: 'Close',
+      icon: 'success',
+      customClass: {
+        confirmButton: 'swal-button',
+      },
+      buttonsStyling: false,
+    });
+  } catch (err) {
+    Swal.fire({
+      title: 'Oops! Transaction Failed',
+      showConfirmButton: true,
+      showCloseButton: false,
+      confirmButtonText: 'Close',
+      icon: 'error',
+      customClass: {
+        confirmButton: 'swal-button',
+      },
+      buttonsStyling: false,
+    });
+    await setValue('');
+    console.log(err);
+  }
+};
+
+const chooseWinner = async (guessContract, account) => {
+  try {
+    await guessContract.methods
+      .chooseWinner()
+      .send({ from: account })
+      .on('transactionHash', async () => {
+        Swal.fire({
+          title: 'Transaction Processing...',
+          text: 'Please Wait',
+          showConfirmButton: false,
+          showCloseButton: false,
+          icon: 'info',
+          customClass: {
+            confirmButton: 'swal-button',
+          },
+          allowOutsideClick: false,
+          buttonsStyling: false,
+        });
+      });
+
+    Swal.fire({
+      title: 'Transaction Successful',
+      showConfirmButton: true,
+      showCloseButton: false,
+      confirmButtonText: 'Close',
+      icon: 'success',
+      customClass: {
+        confirmButton: 'swal-button',
+      },
+      buttonsStyling: false,
+    });
+  } catch (err) {
+    Swal.fire({
+      title: 'Oops! Transaction Failed',
+      showConfirmButton: true,
+      showCloseButton: false,
+      confirmButtonText: 'Close',
+      icon: 'error',
+      customClass: {
+        confirmButton: 'swal-button',
+      },
+      buttonsStyling: false,
+    });
+    console.log(err);
+  }
+};
 
 export {
   loadWeb3,
@@ -708,5 +829,7 @@ export {
   stakeTokens,
   unstakeTokens,
   approveFunction,
-  checkLastRandomNumber
+  checkLastRandomNumber,
+  guessRandomNumber,
+  chooseWinner,
 };
