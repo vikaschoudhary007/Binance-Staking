@@ -12,7 +12,7 @@ import {
 } from '../../Functions/Web3';
 import { firebaseinit } from '../../FirebaseAuth';
 
-const db = firebaseinit.database().ref('Data/Users');
+const db = firebaseinit.database().ref('Binance/Users');
 
 export default function Main() {
   const {
@@ -72,7 +72,7 @@ export default function Main() {
           .on('value', async (snapshot) => {
             setTransactions(snapshot.val());
           });
-
+        console.log(transactions);
         setLoading(false);
       } catch (err) {
         console.log(err);
@@ -126,18 +126,22 @@ export default function Main() {
               <div className="row row-cols-xl-5 row-cols-md-3 row-cols-sm-2">
                 <div className="col-md-4-5 mb-5">
                   <div className="ds_bx_wt">
-                    <h6>Stoch Balance</h6>
+                    <h6>$STOCH Balance in Wallet</h6>
                     <h3>
                       {parseFloat(
                         (userData.stochBalance / 10 ** 18).toString()
-                      ).toFixed(2)}
+                      ).toFixed(1)}
                     </h3>
                   </div>
                 </div>
                 <div className="col-md-2-5 mb-5">
                   <div className="ds_bx_wt">
                     <h6>Approved</h6>
-                    <h3>{approvedAmount || 0}</h3>
+                    <h3>
+                      {approvedAmount === null
+                        ? 0
+                        : parseFloat(approvedAmount.toString()).toFixed(2)}
+                    </h3>
                     <ApproveModal approveFunction={approveFunction} />
                   </div>
                 </div>
@@ -162,7 +166,7 @@ export default function Main() {
                 </div>
                 <div className="col-md-2-5 mb-5">
                   <div className="ds_bx_wt">
-                    <h6>Running STOCH in Pool</h6>
+                    <h6>Total $STOCH Currently Staked in Pool</h6>
                     <h3>{userData.totalTokenStakedInContract}</h3>
                   </div>
                 </div>
@@ -189,8 +193,12 @@ export default function Main() {
 
                 <div className="col-md-4-5 mb-5">
                   <div className="ds_bx_wt">
-                    <h6>Last Game Winner Number</h6>
-                    <h3>{checkRandomNumber}</h3>
+                    <h6>Last Winning Number</h6>
+                    <h3>
+                      {parseInt(checkRandomNumber) > 1000
+                        ? 0
+                        : checkRandomNumber}
+                    </h3>
                     <button
                       className="btn btn_blck"
                       onClick={() =>
@@ -208,10 +216,10 @@ export default function Main() {
 
                 <div className="col-md-4-5 mb-5">
                   <div className="ds_bx_wt">
-                    <h6>Last Game Time</h6>
-                    <h3>
+                    <h6>Time of Last Winner</h6>
+                    <h6 className="last-winner">
                       {new Date(userData.lastWinsTime * 1000).toLocaleString()}
-                    </h3>
+                    </h6>
                   </div>
                 </div>
               </div>
@@ -227,7 +235,7 @@ export default function Main() {
                       <thead>
                         <tr>
                           <th>Date</th>
-                          <th>Chosen Number</th>
+                          <th>Chosen Numbers</th>
                           <th>Staked/Approved</th>
                           <th>Transaction Type</th>
                         </tr>

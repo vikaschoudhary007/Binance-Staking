@@ -1,13 +1,12 @@
-import React, { useContext } from "react";
-import {Link} from "react-router-dom";
-import "../../css/bootstrap.min.css";
-import "../../css/style.css";
-import logo from "../../images/logo.svg";
-import menu from "../../images/menu.svg";
-import {UserContext} from "../../Context/UserContext"
+import React, { useContext } from 'react';
+import { Link } from 'react-router-dom';
+import '../../css/bootstrap.min.css';
+import '../../css/style.css';
+import logo from '../../images/logo.png';
+import menu from '../../images/menu.svg';
+import { UserContext } from '../../Context/UserContext';
 
 export default function Header() {
-
   const { connectTag, handleConnect } = useContext(UserContext);
 
   return (
@@ -38,13 +37,17 @@ export default function Header() {
                   {/* <a className="nav-link active" href="dashboard.html">
                     Dashboard
                   </a> */}
-                  <Link to="/dashboard" className="nav-link active">Dashboard</Link>
+                  <Link to="/dashboard" className="nav-link active">
+                    Dashboard
+                  </Link>
                 </li>
                 <li className="nav-item">
                   {/* <a className="nav-link" href="choose_number.html">
                     Choose Number
                   </a> */}
-                  <Link to="/choose_number" className="nav-link">Choose Number</Link>
+                  <Link to="/choose_number" className="nav-link">
+                    Choose Number
+                  </Link>
                 </li>
               </ul>
               <div className="d-flex">
@@ -56,11 +59,7 @@ export default function Header() {
                   }
                 </a> */}
                 <button className="btn btn_bfs" onClick={handleConnect}>
-                  {
-                    !localStorage.account 
-                    ? (<>Connect</>)
-                    : (<>{connectTag}</>)
-                  }
+                  {!localStorage.account ? <>Connect</> : <>{connectTag}</>}
                 </button>
               </div>
             </div>

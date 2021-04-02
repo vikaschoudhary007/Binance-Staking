@@ -1,49 +1,12 @@
 [
 	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_vrfCoordinator",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "_link",
-				"type": "address"
-			}
-		],
+		"inputs": [],
 		"stateMutability": "nonpayable",
 		"type": "constructor"
 	},
 	{
 		"inputs": [],
-		"name": "_externalAddress",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
 		"name": "calculateCurrentTokenAmount",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "checkLinkBalance",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -139,32 +102,19 @@
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "fee",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
 		"inputs": [
 			{
 				"internalType": "uint256",
-				"name": "userProvidedSeed",
+				"name": "_seed",
 				"type": "uint256"
 			}
 		],
-		"name": "guessRandomNumber",
+		"name": "generateRandomNumber",
 		"outputs": [
 			{
-				"internalType": "bytes32",
+				"internalType": "uint256",
 				"name": "",
-				"type": "bytes32"
+				"type": "uint256"
 			}
 		],
 		"stateMutability": "nonpayable",
@@ -178,19 +128,6 @@
 				"internalType": "bool",
 				"name": "",
 				"type": "bool"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "keyHash",
-		"outputs": [
-			{
-				"internalType": "bytes32",
-				"name": "",
-				"type": "bytes32"
 			}
 		],
 		"stateMutability": "view",
@@ -236,24 +173,6 @@
 		"type": "function"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "bytes32",
-				"name": "requestId",
-				"type": "bytes32"
-			},
-			{
-				"internalType": "uint256",
-				"name": "randomness",
-				"type": "uint256"
-			}
-		],
-		"name": "rawFulfillRandomness",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
 		"inputs": [],
 		"name": "remainingNumbersToSet",
 		"outputs": [
@@ -284,7 +203,7 @@
 		"name": "stochContractAddress",
 		"outputs": [
 			{
-				"internalType": "contract ERC20Interface",
+				"internalType": "contract BEP20Interface",
 				"name": "",
 				"type": "address"
 			}
@@ -303,19 +222,6 @@
 			}
 		],
 		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_me",
-				"type": "address"
-			}
-		],
-		"name": "transferChainTokens",
-		"outputs": [],
-		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{

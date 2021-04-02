@@ -2,7 +2,6 @@ import React, { useContext, useState } from 'react';
 import { Modal } from 'react-bootstrap';
 import '../../css/bootstrap.min.css';
 import '../../css/style.css';
-import logo from '../../images/logo.svg';
 import { UserContext } from '../../Context/UserContext';
 
 export default function StakeModal({ approveFunction }) {
@@ -24,7 +23,7 @@ export default function StakeModal({ approveFunction }) {
       <Modal show={modalShow}>
         <div className="modal-div">
           <div className="modal-header">
-            <p>STOCH</p>
+            <p>$STOCH</p>
             <button
               onClick={() => {
                 setModalShow(false);
@@ -36,10 +35,9 @@ export default function StakeModal({ approveFunction }) {
           </div>
           <div className="modal-body">
             <h2>
-              How Much Do you
-              <br /> want to Approve?
+              How much do you <br /> want to approve?
             </h2>
-            <label htmlFor="modal-input">Approve STOCH</label>
+            <label htmlFor="modal-input">Approve $STOCH</label>
             <input
               type="text"
               id="modal-input"
@@ -58,8 +56,8 @@ export default function StakeModal({ approveFunction }) {
           </div>
           <div className="modal-footer">
             <div className="modal-footer-content">
-              <p>Lorem ipsum dolor amet consectectur adipiscing elit.</p>
-              <p>Mauris pretium eros justo, nec fringilla nibh semper sed.</p>
+              {/* <p>Lorem ipsum dolor amet consectectur adipiscing elit.</p>
+              <p>Mauris pretium eros justo, nec fringilla nibh semper sed.</p> */}
             </div>
             <button
               className="btn btn_stake_blck"

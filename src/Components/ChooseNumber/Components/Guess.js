@@ -1,6 +1,6 @@
-import React, { useContext } from "react";
-import { UserContext } from "../../../Context/UserContext";
-import Swal from "sweetalert2";
+import React, { useContext } from 'react';
+import { UserContext } from '../../../Context/UserContext';
+import Swal from 'sweetalert2';
 
 export default function Guess({
   guesses,
@@ -32,13 +32,13 @@ export default function Guess({
             title: "Can't exceed available balance to choose",
             showConfirmButton: true,
             showCloseButton: false,
-            confirmButtonText:"Close",
-            icon: "warning",
+            confirmButtonText: 'Close',
+            icon: 'warning',
             customClass: {
-              confirmButton: 'swal-button'
+              confirmButton: 'swal-button',
             },
-            buttonsStyling:false
-          })
+            buttonsStyling: false,
+          });
           setCheckboxId(new Map(checkboxId.set(id, false)));
           return;
         }
@@ -57,6 +57,7 @@ export default function Guess({
     }
 
     setSelectedGuesses(temp);
+    console.log(selectedGuesses);
   };
 
   return (

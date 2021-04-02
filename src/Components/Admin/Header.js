@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import '../../css/bootstrap.min.css';
 import '../../css/style.css';
-import logo from '../../images/logo.svg';
+import logo from '../../images/logo.png';
 import menu from '../../images/menu.svg';
 import { UserContext } from '../../Context/UserContext';
 

@@ -8,10 +8,11 @@ import {
   checkLastRandomNumber,
   chooseWinner,
   guessRandomNumber,
+  emitEveryWeekTokens,
 } from '../../Functions/Web3';
 import ApproveModal from './ApproveModal';
 
-const db = firebaseinit.database().ref('Data/Users');
+const db = firebaseinit.database().ref('Binance/Users');
 
 export default function Main() {
   const {
@@ -20,13 +21,11 @@ export default function Main() {
     setCheckRandomNumber,
     account,
     guessContract,
+    tokenContract,
   } = useContext(UserContext);
   const [approvedAmount, setApprovedAmount] = useState(0);
   const [value, setValue] = useState('');
   const [loading, setLoading] = useState(false);
-  const [adminData, setAdminData] = useState({
-    linkBakance: 0,
-  });
 
   useEffect(() => {
     const getApprovedAmount = async () => {
@@ -39,15 +38,6 @@ export default function Main() {
           .on('value', (snapshot) => {
             setApprovedAmount(snapshot.val());
           });
-
-        const checkLinkBalance = await guessContract.methods
-          .checkLinkBalance()
-          .call({ from: account });
-
-        setAdminData({
-          ...adminData,
-          linkBakance: checkLinkBalance,
-        });
 
         setLoading(false);
       } catch (err) {
@@ -71,14 +61,6 @@ export default function Main() {
           });
 
         setLoading(false);
-
-        const checkLinkBalance = await guessContract.methods
-          .checkLinkBalance()
-          .call({ from: account });
-        setAdminData({
-          ...adminData,
-          linkBakance: checkLinkBalance,
-        });
       } catch (err) {
         console.log(err);
       }
@@ -96,7 +78,7 @@ export default function Main() {
               <div className="row row-cols-xl-5 row-cols-md-3 row-cols-sm-2">
                 <div className="col-md-4-5 mb-5">
                   <div className="ds_bx_wt">
-                    <h6>Stoch Balance</h6>
+                    <h6>$STOCH Balance in Wallet</h6>
                     <h3>
                       {parseFloat(
                         (userData.stochBalance / 10 ** 18).toString()
@@ -113,29 +95,6 @@ export default function Main() {
                 </div>
                 <div className="col-md-2-5 mb-5">
                   <div className="ds_bx_wt">
-                    <h6>Link Balance</h6>
-                    <h3>
-                      {parseFloat(adminData.linkBakance / 10 ** 18).toFixed(2)}
-                    </h3>
-                  </div>
-                </div>
-                <div className="col-md-4-5 mb-5">
-                  <div className="ds_bx_wt">
-                    <h6>Last Game Time</h6>
-                    <h3>
-                      {new Date(userData.lastWinsTime * 1000).toLocaleString()}
-                    </h3>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Changes */}
-
-            <div className="col-md-12">
-              <div className="row row-cols-xl-5 row-cols-md-3 row-cols-sm-2">
-                <div className="col-md-2-5 mb-5">
-                  <div className="ds_bx_wt">
                     <h6>Expected Rewards</h6>
                     <h3>
                       {parseFloat(
@@ -145,6 +104,35 @@ export default function Main() {
                         ).toString()
                       ).toFixed(2)}
                     </h3>
+                  </div>
+                </div>
+                <div className="col-md-4-5 mb-5">
+                  <div className="ds_bx_wt">
+                    <h6>Time of Last Winner</h6>
+                    <h6 className="last-winner">
+                      {new Date(userData.lastWinsTime * 1000).toLocaleString()}
+                    </h6>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Changes */}
+
+            <div className="col-md-12">
+              <div className="row row-cols-xl-5 row-cols-md-3 row-cols-sm-2">
+                <div className="col-md-4-5 mb-5">
+                  <div className="ds_bx_wt">
+                    <h6>Emit Weakly Tokens</h6>
+                    <h3></h3>
+                    <button
+                      className="btn btn_blck"
+                      onClick={() =>
+                        emitEveryWeekTokens(tokenContract, account)
+                      }
+                    >
+                      Emit
+                    </button>
                   </div>
                 </div>
 
@@ -181,7 +169,7 @@ export default function Main() {
                     <h3></h3>
                     <button
                       className="btn btn_blck"
-                      onClick={() => chooseWinner()}
+                      onClick={() => chooseWinner(guessContract, account)}
                     >
                       Choose
                     </button>
@@ -191,7 +179,11 @@ export default function Main() {
                 <div className="col-md-4-5 mb-5">
                   <div className="ds_bx_wt">
                     <h6>Check Random Number</h6>
-                    <h3>{checkRandomNumber}</h3>
+                    <h3>
+                      {parseInt(checkRandomNumber) > 1000
+                        ? 0
+                        : checkRandomNumber}
+                    </h3>
                     <button
                       className="btn btn_blck"
                       onClick={() =>

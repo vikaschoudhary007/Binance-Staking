@@ -1,28 +1,28 @@
-import React, { useContext, useEffect, useState } from "react";
-import "../../css/bootstrap.min.css";
-import "../../css/style.css";
-import Guess from "./Components/Guess";
-import Pagination from "./Components/Pagination";
-import { UserContext } from "../../Context/UserContext";
-import { firebaseinit } from "../../FirebaseAuth";
-import { chooseNumbers } from "../../Functions/Web3";
+import React, { useContext, useEffect, useState } from 'react';
+import '../../css/bootstrap.min.css';
+import '../../css/style.css';
+import Guess from './Components/Guess';
+import Pagination from './Components/Pagination';
+import { UserContext } from '../../Context/UserContext';
+import { firebaseinit } from '../../FirebaseAuth';
+import { chooseNumbers } from '../../Functions/Web3';
 
-const db = firebaseinit.database().ref("Data");
+const db = firebaseinit.database().ref('Binance');
 
 export default function Main() {
   const { userData, account, guessContract } = useContext(UserContext);
 
   const array = [
-    "001 - 100",
-    "101 - 200",
-    "201 - 300",
-    "301 - 400",
-    "401 - 500",
-    "501 - 600",
-    "601 - 700",
-    "701 - 800",
-    "801 - 900",
-    "901 - 1000",
+    '001 - 100',
+    '101 - 200',
+    '201 - 300',
+    '301 - 400',
+    '401 - 500',
+    '501 - 600',
+    '601 - 700',
+    '701 - 800',
+    '801 - 900',
+    '901 - 1000',
   ];
 
   const [loading, setLoading] = useState(false);
@@ -33,7 +33,6 @@ export default function Main() {
   const [selectedGuesses, setSelectedGuesses] = useState([]);
   const [checkboxId, setCheckboxId] = useState(new Map());
   const [choosedArray, setChoosedArray] = useState(new Map());
-
 
   useEffect(() => {
     function range(start, end) {
@@ -47,24 +46,22 @@ export default function Main() {
 
     const getDataFromFirebase = async () => {
       setLoading(true);
-      await db.on("value", async (snapshot) => {
+      await db.on('value', async (snapshot) => {
         const temp = snapshot.val();
-        
-        
-        if(temp === null){
-          await db.child("ChoosedArray").update([-1]);
+
+        if (temp === null) {
+          await db.child('ChoosedArray').update([-1]);
         }
         if (temp === undefined) {
-          await db.child("ChoosedArray").update([-1]);
+          await db.child('ChoosedArray').update([-1]);
         }
 
-        await db.on("value", (snapshot) => {
+        await db.on('value', (snapshot) => {
           const data = snapshot.val().ChoosedArray;
 
           for (var i = 0; i < data.length; i++) {
             choosedArray.set(parseInt(data[i]), true);
           }
-
         });
         setLoading(false);
       });
@@ -94,17 +91,16 @@ export default function Main() {
                 <div className="col-xl-12 mb-3 col-sm-6">
                   <div
                     className="ds_bx_wt wt_mx_305 min_h_292"
-                    style={{ overflow: "inherit", marginBottom: "5vh" }}
+                    style={{ overflow: 'inherit', marginBottom: '5vh' }}
                   >
                     <h6>Chosen Numbers</h6>
                     <h3>
-                      {
-                        selectedGuesses.map((data) => (
-                          <>
-                          {`${data}, `}
-                          </>
-                        ))
-                      }
+                      {selectedGuesses.map((data, key) => {
+                        if (key === selectedGuesses.length - 1) {
+                          return <>{`${data} `}</>;
+                        }
+                        return <>{`${data}, `}</>;
+                      })}
                     </h3>
                     {selectedGuesses.length === 0 ? (
                       <></>
@@ -127,41 +123,38 @@ export default function Main() {
                   </div>
                 </div>
 
-                
                 <div className="col-xl-12 mb-3 col-sm-6">
                   <div
                     className="ds_bx_wt wt_mx_305 min_h_292"
-                    style={{ overflow: "inherit" }}
+                    style={{ overflow: 'inherit' }}
                   >
-                    
-                    <h6>Chosen History</h6>
+                    <h6>Your Selections</h6>
                     <h3>
-                      {userData.viewNumbersSelected.map((data) => (
-                        <>
-                          {`${data}, `}
-                        </>
-                      ))}
-                     
+                      {userData.viewNumbersSelected.map((data, key) => {
+                        if (key === userData.viewNumbersSelected.length - 1) {
+                          return <>{`${data} `}</>;
+                        }
+                        return <>{`${data}, `}</>;
+                      })}
                     </h3>
-
                   </div>
                 </div>
-                
+
                 <div className="col-xl-12 mb-3 col-sm-6">
                   <div className="ds_bx_wt wt_mx_305">
-                    <h6>Available Balance to Choose</h6>
+                    <h6>Number of Selections Remaining</h6>
                     <h3>{userData.remainingNumbersToSet}</h3>
                   </div>
                 </div>
                 <div className="col-xl-12 mb-3 col-sm-6">
                   <div className="ds_bx_wt wt_mx_305">
-                    <h6>Total Limit</h6>
+                    <h6>Your Maximum Number of Selections</h6>
                     <h3>{userData.maxNumberUserCanSelect}</h3>
                   </div>
                 </div>
                 <div className="col-xl-12 mb-3 col-sm-6">
                   <div className="ds_bx_wt wt_mx_305">
-                    <h6>Running STOCH in Pool</h6>
+                    <h6>Total $STOCH Currently Staked in Pool</h6>
                     <h3>{userData.totalTokenStakedInContract}</h3>
                   </div>
                 </div>

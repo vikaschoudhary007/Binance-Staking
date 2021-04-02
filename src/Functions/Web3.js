@@ -4,8 +4,8 @@ import GuessABI from '../Contract/GuessContract.json';
 import { firebaseinit } from '../FirebaseAuth';
 import Swal from 'sweetalert2';
 
-const db = firebaseinit.database().ref('Data');
-const userdb = firebaseinit.database().ref('Data/Users');
+const db = firebaseinit.database().ref('Binance');
+const userdb = firebaseinit.database().ref('Binance/Users');
 
 /////////// CHECK IF BROWSER IS ENABLED WITH Web3 //////////////
 
@@ -53,12 +53,12 @@ const loadBlockChainData = async (
     localStorage.networkId = networkId;
     const tokenContract = await new web3.eth.Contract(
       TokenABI,
-      '0x7Ed44F825a897eb06BA33Fdd71695884D43DebFC'
+      '0xf2F531E97ed7Fc7956dBFF8DCFbB7AfF714439DA'
     );
 
     const guessContract = await new web3.eth.Contract(
       GuessABI,
-      '0x1e22999Fe0e7EF977Cb195F42E3a7a512f599A12'
+      '0x791266fA124788aEF09345e3782160c8241d86aC'
     );
     await setTokenContract(tokenContract);
 
@@ -109,12 +109,12 @@ const accountDetails = async (account, userData, setUserData, setLoading) => {
 
     const tokenContract = await new web3.eth.Contract(
       TokenABI,
-      '0x7Ed44F825a897eb06BA33Fdd71695884D43DebFC'
+      '0xf2F531E97ed7Fc7956dBFF8DCFbB7AfF714439DA'
     );
 
     const guessContract = await new web3.eth.Contract(
       GuessABI,
-      '0x1e22999Fe0e7EF977Cb195F42E3a7a512f599A12'
+      '0x791266fA124788aEF09345e3782160c8241d86aC'
     );
 
     const stochBalance = await tokenContract.methods
@@ -238,6 +238,39 @@ const chooseNumbers = async (
             console.log(countValue);
           });
       }
+
+      //////////////////////////////
+      await userdb.child(account).once('value', async (snapshot) => {
+        const data = snapshot.val().SelectedArray;
+        console.log(data);
+
+        if (data === undefined) {
+          await userdb
+            .child(account)
+            .update({
+              SelectedArray: [-1],
+            })
+            .then(async () => {
+              await userdb.child(account).once('value', async (snapshot) => {
+                const temp = snapshot.val().SelectedArray;
+                await userdb.child(account).update({
+                  SelectedArray: temp.concat(dataArray),
+                });
+              });
+            });
+
+          return;
+        }
+
+        await userdb.child(account).once('value', async (snapshot) => {
+          const temp = snapshot.val().SelectedArray;
+
+          await userdb.child(account).update({
+            SelectedArray: temp.concat(dataArray),
+          });
+        });
+      });
+      //////////////////////////////
 
       await userdb
         .child(account)
@@ -465,6 +498,36 @@ const unstakeTokens = async (guessContract, account) => {
         });
       });
 
+    ///////////////////////////////////////////
+
+    await db.child('ChoosedArray').once('value', async (snapshot) => {
+      let array1;
+      let array2;
+      array1 = snapshot.val();
+
+      await userdb
+        .child(account)
+        .child('SelectedArray')
+        .once('value', async (snapshot) => {
+          array2 = snapshot.val();
+        });
+
+      array1 = await array1.filter((val) => !array2.includes(val));
+
+      await userdb
+        .child(account)
+        .update({
+          SelectedArray: [-1],
+        })
+        .then(async () => {
+          await db.update({
+            ChoosedArray: array1.concat([-1]),
+          });
+        });
+    });
+
+    ////////////////////////////////////////////
+
     await userdb.once('value', async (snapshot) => {
       const temp = snapshot.val();
       console.log('vikas', temp);
@@ -571,7 +634,7 @@ const approveFunction = async (
 
     setError(false);
     await tokenContract.methods
-      .approve('0x1e22999Fe0e7EF977Cb195F42E3a7a512f599A12', tokens)
+      .approve('0x791266fA124788aEF09345e3782160c8241d86aC', tokens)
       .send({ from: account })
       .on('transactionHash', async () => {
         await setModalShow(false);
@@ -724,7 +787,7 @@ const guessRandomNumber = async (
     }
 
     await guessContract.methods
-      .guessRandomNumber(userProvidedSeed)
+      .generateRandomNumber(userProvidedSeed)
       .send({
         from: account,
       })
@@ -774,8 +837,56 @@ const guessRandomNumber = async (
 
 const chooseWinner = async (guessContract, account) => {
   try {
+    console.log(guessContract);
     await guessContract.methods
       .chooseWinner()
+      .send({ from: account })
+      .on('transactionHash', async () => {
+        Swal.fire({
+          title: 'Transaction Processing...',
+          text: 'Please Wait',
+          showConfirmButton: false,
+          showCloseButton: false,
+          icon: 'info',
+          customClass: {
+            confirmButton: 'swal-button',
+          },
+          allowOutsideClick: false,
+          buttonsStyling: false,
+        });
+      });
+
+    Swal.fire({
+      title: 'Transaction Successful',
+      showConfirmButton: true,
+      showCloseButton: false,
+      confirmButtonText: 'Close',
+      icon: 'success',
+      customClass: {
+        confirmButton: 'swal-button',
+      },
+      buttonsStyling: false,
+    });
+  } catch (err) {
+    Swal.fire({
+      title: 'Oops! Transaction Failed',
+      showConfirmButton: true,
+      showCloseButton: false,
+      confirmButtonText: 'Close',
+      icon: 'error',
+      customClass: {
+        confirmButton: 'swal-button',
+      },
+      buttonsStyling: false,
+    });
+    console.log(err);
+  }
+};
+
+const emitEveryWeekTokens = async (tokenContract, account) => {
+  try {
+    await tokenContract.methods
+      .emitEveryWeekTokens()
       .send({ from: account })
       .on('transactionHash', async () => {
         Swal.fire({
@@ -832,4 +943,5 @@ export {
   checkLastRandomNumber,
   guessRandomNumber,
   chooseWinner,
+  emitEveryWeekTokens,
 };

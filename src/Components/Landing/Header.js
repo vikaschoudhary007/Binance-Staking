@@ -1,14 +1,11 @@
-import React from "react";
-import "../../css/bootstrap.min.css";
-import "../../css/style.css";
-import logo from "../../images/logo.svg";
-import menu from "../../images/menu.svg";
-import {UserContext} from "../../Context/UserContext"
+import React from 'react';
+import '../../css/bootstrap.min.css';
+import '../../css/style.css';
+import logo from '../../images/logo.png';
+import menu from '../../images/menu.svg';
+import { Link } from 'react-router-dom';
 
 export default function Header() {
-
-  // const { connectTag, handleConnect } = useContext(UserContext);
-
   return (
     <div>
       <header className="header" id="header">
@@ -41,6 +38,16 @@ export default function Header() {
                   </a>
                 </li>
                 <li className="nav-item">
+                  <a className="nav-link" href="#Audit">
+                    Preserving Value For Investors
+                  </a>
+                </li>
+                <li className="nav-item">
+                  <a className="nav-link" href="#APY">
+                    APY
+                  </a>
+                </li>
+                <li className="nav-item">
                   <a className="nav-link" href="#Tokenomics">
                     Tokenomics
                   </a>
@@ -55,21 +62,12 @@ export default function Header() {
                     Roadmap
                   </a>
                 </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="#Audit">
-                    Audit
-                  </a>
-                </li>
               </ul>
-              {/* <div className="d-flex">
-                <button className="btn btn_bfs" onClick={handleConnect}>
-                  {
-                    !localStorage.account 
-                    ? (<>Connect</>)
-                    : (<>{connectTag}</>)
-                  }
-                </button>
-              </div> */}
+              <div className="d-flex">
+                <Link to="/dashboard" className="btn btn_bfs">
+                  Launch App
+                </Link>
+              </div>
             </div>
           </nav>
         </div>
