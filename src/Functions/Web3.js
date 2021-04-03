@@ -7,8 +7,8 @@ import Swal from 'sweetalert2';
 const db = firebaseinit.database().ref('Binance');
 const userdb = firebaseinit.database().ref('Binance/Users');
 
-const TokenContractAddress = '0x48D13A3aB8d8F440B5279Ec7E1e6B6B9CC28C232';
-const GuessContractAddress = '0x1e634d7A3Eb8BDee8c4d78660dEE31b7dA26AD87';
+const TokenContractAddress = '0xb57A5BfF7141EC4a95a08c7321CB14fafD7952a8';
+const GuessContractAddress = '0x5Ab60b4Aec020e1dA4760971C1c34Ff092F6F1b3';
 
 /////////// CHECK IF BROWSER IS ENABLED WITH Web3 //////////////
 
