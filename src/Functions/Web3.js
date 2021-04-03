@@ -7,6 +7,9 @@ import Swal from 'sweetalert2';
 const db = firebaseinit.database().ref('Binance');
 const userdb = firebaseinit.database().ref('Binance/Users');
 
+const TokenContractAddress = '0x48D13A3aB8d8F440B5279Ec7E1e6B6B9CC28C232';
+const GuessContractAddress = '0x1e634d7A3Eb8BDee8c4d78660dEE31b7dA26AD87';
+
 /////////// CHECK IF BROWSER IS ENABLED WITH Web3 //////////////
 
 const loadWeb3 = async () => {
@@ -53,12 +56,12 @@ const loadBlockChainData = async (
     localStorage.networkId = networkId;
     const tokenContract = await new web3.eth.Contract(
       TokenABI,
-      '0xf2F531E97ed7Fc7956dBFF8DCFbB7AfF714439DA'
+      TokenContractAddress
     );
 
     const guessContract = await new web3.eth.Contract(
       GuessABI,
-      '0x791266fA124788aEF09345e3782160c8241d86aC'
+      GuessContractAddress
     );
     await setTokenContract(tokenContract);
 
@@ -109,12 +112,12 @@ const accountDetails = async (account, userData, setUserData, setLoading) => {
 
     const tokenContract = await new web3.eth.Contract(
       TokenABI,
-      '0xf2F531E97ed7Fc7956dBFF8DCFbB7AfF714439DA'
+      TokenContractAddress
     );
 
     const guessContract = await new web3.eth.Contract(
       GuessABI,
-      '0x791266fA124788aEF09345e3782160c8241d86aC'
+      GuessContractAddress
     );
 
     const stochBalance = await tokenContract.methods
@@ -634,7 +637,7 @@ const approveFunction = async (
 
     setError(false);
     await tokenContract.methods
-      .approve('0x791266fA124788aEF09345e3782160c8241d86aC', tokens)
+      .approve(GuessContractAddress, tokens)
       .send({ from: account })
       .on('transactionHash', async () => {
         await setModalShow(false);

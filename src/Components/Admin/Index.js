@@ -123,7 +123,7 @@ export default function Main() {
               <div className="row row-cols-xl-5 row-cols-md-3 row-cols-sm-2">
                 <div className="col-md-4-5 mb-5">
                   <div className="ds_bx_wt">
-                    <h6>Emit Weakly Tokens</h6>
+                    <h6>Emit Weekly Tokens</h6>
                     <h3></h3>
                     <button
                       className="btn btn_blck"

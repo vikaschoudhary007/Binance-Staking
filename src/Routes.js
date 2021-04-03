@@ -123,10 +123,10 @@ export default function Routes() {
     >
       <Router>
         <Switch>
-          <Route exec path="/dashboard" component={DashboardPage} />
-          <Route exec path="/choose_number" component={ChooseNumberPage} />
-          <Route exec path="/admin" component={AdminPage} />
-          <Route exec path="/" component={LandingPage} />
+          <Route exect path="/dashboard" component={DashboardPage} />
+          <Route exect path="/choose_number" component={ChooseNumberPage} />
+          <Route exect path="/admin" component={AdminPage} />
+          <Route exect path="/" component={LandingPage} />
         </Switch>
       </Router>
     </UserProvider>
