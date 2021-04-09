@@ -748,16 +748,14 @@ const approveFunction = async (
   }
 };
 
-const checkLastRandomNumber = async (
-  setCheckRandomNumber,
-  account,
-  guessContract
-) => {
+const checkLastRandomNumber = async (setCheckRandomNumber) => {
   try {
-    const checkRandomNumber = await guessContract.methods
-      .checkRandomNumber()
-      .call({ from: account });
-    await setCheckRandomNumber(checkRandomNumber);
+    await db
+      .child('randomNumber')
+      .child('number')
+      .once('value', async (snapshot) => {
+        await setCheckRandomNumber(snapshot.val());
+      });
   } catch (err) {
     console.log(err);
   }
@@ -772,7 +770,6 @@ const guessRandomNumber = async (
   setValue
 ) => {
   try {
-    console.log(userProvidedSeed);
     if (userProvidedSeed === '') {
       Swal.fire({
         title: 'Please Enter Seed First',
@@ -808,6 +805,13 @@ const guessRandomNumber = async (
           buttonsStyling: false,
         });
       });
+
+    const result = await guessContract.methods
+      .checkRandomNumber()
+      .call({ from: account });
+    console.log(result);
+
+    await db.child('randomNumber').update({ number: result });
 
     await setValue('');
     Swal.fire({

@@ -43,11 +43,9 @@ export default function Roadmap() {
                 <p class="def_p mb-0">
                   &#8226; Fully operational platform (COMPLETE)
                 </p>
-                <p class="def_p mb-0">&#8226; PreSale</p>
-                <p class="def_p mb-0">&#8226; Liquidity Locking</p>
-                <p class="def_p mb-0">&#8226; Pancakeswap Listing</p>
-                <p class="def_p mb-0">&#8226; Coingecko Listing</p>
-                <p class="def_p mb-0">&#8226; Coin Market Cap Listing</p>
+                <p class="def_p mb-0">&#8226; PreSale (COMPLETE)</p>
+                <p class="def_p mb-0">&#8226; Liquidity Locking (COMPLETE)</p>
+                <p class="def_p mb-0">&#8226; Pancakeswap Listing (COMPLETE)</p>
               </div>
             </div>
 
@@ -58,9 +56,31 @@ export default function Roadmap() {
             <p class="def_p mb-0">Ut ultricies erat ut lectus consequat, quis accumsan risus hendrerit. Suspendisse quam
               euismod, rutrum sem sed, pretium diam. Cras urna urna ultrices utibus.</p> */}
 
+                <p class="def_p mb-0">&#8226; Coingecko Listing</p>
+                <p class="def_p mb-0">&#8226; Coin Market Cap Listing</p>
+                <p class="def_p mb-0">&#8226; Application improvements</p>
                 <p class="def_p mb-0">
                   &#8226; Trustless joint-staking mechanism
                 </p>
+
+                {/* <p class="def_p mb-0">
+                  &#8226; Development of the platform across multiple chains
+                </p>
+                <p class="def_p mb-0">
+                  &#8226; Lending and borrowing facilities using $STOCH as
+                  collateral
+                </p>
+                <p class="def_p mb-0">
+                  &#8226; Create new financial instruments
+                </p> */}
+              </div>
+
+              <div class="blk_bx">
+                <h6>Q3 2021</h6>
+                {/* <h4>Ut ultricies erat lectus consequat</h4>
+            <p class="def_p mb-0">Ut ultricies erat ut lectus consequat, quis accumsan risus hendrerit. Suspendisse quam
+              euismod, rutrum sem sed, pretium diam. Cras urna urna ultrices utibus.</p> */}
+
                 <p class="def_p mb-0">
                   &#8226; Development of the platform across multiple chains
                 </p>

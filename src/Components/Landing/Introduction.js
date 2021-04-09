@@ -3,12 +3,32 @@ import '../../css/bootstrap.min.css';
 import '../../css/style.css';
 import sc01_img from '../../images/sc01_img.png';
 import definition_img from '../../images/definition_img.png';
+import { Link } from 'react-router-dom';
 
 export default function Introduction() {
   return (
     <div>
       <section className="hm_sc_01 d-flex align-items-center" id="Introduction">
         <div className="max_1200">
+          <div
+            className="d-flex"
+            style={{
+              float: 'right',
+              position: 'fixed',
+              zIndex: 99,
+              top: 0,
+              top: '120px',
+              right: '12px',
+            }}
+          >
+            <a
+              href="https://exchange.pancakeswap.finance/#/swap?inputCurrency=0xb57A5BfF7141EC4a95a08c7321CB14fafD7952a8/"
+              target="_blank"
+              className="btn btn_bfs"
+            >
+              Buy $STOCH
+            </a>
+          </div>
           <div className="row align-items-center">
             <div className="col-md-7">
               <div className="mx_650">

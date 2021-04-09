@@ -202,11 +202,7 @@ export default function Main() {
                     <button
                       className="btn btn_blck"
                       onClick={() =>
-                        checkLastRandomNumber(
-                          setCheckRandomNumber,
-                          account,
-                          guessContract
-                        )
+                        checkLastRandomNumber(setCheckRandomNumber)
                       }
                     >
                       View

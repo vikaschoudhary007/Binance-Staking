@@ -89,7 +89,7 @@ export default function Main() {
                 <div className="col-md-2-5 mb-5">
                   <div className="ds_bx_wt">
                     <h6>Approved</h6>
-                    <h3>{approvedAmount || 0}</h3>
+                    <h3>{parseFloat(approvedAmount).toFixed(2) || 0}</h3>
                     <ApproveModal approveFunction={approveFunction} />
                   </div>
                 </div>
@@ -187,11 +187,7 @@ export default function Main() {
                     <button
                       className="btn btn_blck"
                       onClick={() =>
-                        checkLastRandomNumber(
-                          setCheckRandomNumber,
-                          account,
-                          guessContract
-                        )
+                        checkLastRandomNumber(setCheckRandomNumber)
                       }
                     >
                       View
