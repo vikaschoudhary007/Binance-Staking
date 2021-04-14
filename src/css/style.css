@@ -172,7 +172,7 @@ body {
 }
 .header .navbar-nav li a {
   position: relative;
-  font-size: 16px;
+  font-size: 14px;
   color: #fff !important;
   font-weight: 500;
 }
@@ -222,7 +222,16 @@ body {
 }
 @media screen and (max-width: 1600px) {
   .header .navbar-nav li a {
-    font-size: 11px;
+    font-size: 10px;
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+  .header .navbar-nav li {
+    margin: 0 10px 0 0px;
+  }
+  .header .navbar .btn_bfs {
+    padding: 8px 10px;
+    font-size: 12px;
   }
 }
 @media screen and (max-width: 1199px) {
@@ -230,7 +239,7 @@ body {
     margin: 0 0px 0 0px;
   }
   .header .navbar-nav li a {
-    font-size: 11px;
+    font-size: 10px;
   }
   .header .navbar .navbar-brand img {
     max-width: 180px;
@@ -480,29 +489,6 @@ body {
   margin-bottom: 0;
   text-align: left;
 }
-
-/* //////////////////////// */
-
-.ds_bx_wt h4 {
-  font-size: 25px;
-  font-weight: 800;
-  letter-spacing: -0.6px;
-  color: #000000;
-  margin-bottom: 0;
-  text-align: left;
-}
-
-.ds_bx_wt .last-winner {
-  font-size: 20px;
-  font-weight: 800;
-  letter-spacing: -0.6px;
-  color: #000000;
-  margin-bottom: 0;
-  text-align: left;
-}
-
-/* /////////////////////////////// */
-
 .btn_blck {
   font-size: 16px;
   font-weight: 500;
@@ -835,7 +821,7 @@ body {
 .admin-input {
   width: 100%;
   border-radius: 7px;
-  margin: 5px 0px 0px 0px;
+  margin: 5px 0px 5px 0px;
   padding: 2px 2px 2px 2px;
   border-color: rgba(66, 34, 34, 0.2);
   outline: none;
@@ -852,4 +838,78 @@ body {
   .wt_mx_305 {
     width: 100%;
   }
+}
+
+/*12/04/2021*/
+
+div#datepicker,
+.win-num-filed {
+  background: #ffffff 0% 0% no-repeat padding-box;
+  border: 2px solid #7070701a;
+  border-radius: 10px;
+  opacity: 1;
+  padding: 11px;
+}
+.date-picker-tbl input.form-control,
+.win-num-filed input.form-control {
+  background-color: none !important;
+  border: none;
+  background-color: transparent !important;
+  padding: 5px 5px 5px 5px;
+  font-weight: 420;
+}
+.model-contents label {
+  text-align: left;
+  font: normal normal normal 14px/17px Inter;
+  letter-spacing: 0px;
+  color: #000;
+  opacity: 1;
+  font-size: 14px;
+  text-transform: capitalize;
+}
+.modal-footer.submit-btn button {
+  top: 598px;
+  left: 775px;
+  width: 370px;
+  height: 50px;
+  background: #000000 0% 0% no-repeat padding-box;
+  border-radius: 10px;
+  opacity: 1;
+  text-align: center;
+  letter-spacing: 0px;
+  color: #ffffff;
+  text-transform: uppercase;
+  opacity: 1;
+  font-size: 16px;
+}
+
+.submit-btn:hover button {
+  color: #fff;
+  background: #ff0000;
+}
+
+td.edit_btn a.btn {
+  background: #ffffff 0% 0% no-repeat padding-box;
+  border: 2px solid #000000;
+  border-radius: 10px;
+  opacity: 1;
+  text-align: center;
+  font: normal normal medium 16px/19px Inter;
+  letter-spacing: 0px;
+  color: #000000;
+  text-transform: uppercase;
+  opacity: 1;
+  font-size: 16px;
+}
+.modal-content p {
+  text-align: left;
+  font: normal normal medium 16px/28px Inter;
+  letter-spacing: 0px;
+  color: #000000;
+  opacity: 1;
+  font-size: 16px;
+  padding-left: 11px;
+}
+.modal-content p img {
+  padding-right: 10px;
 }

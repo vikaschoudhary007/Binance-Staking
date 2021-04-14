@@ -12,6 +12,7 @@ import {
 } from '../../Functions/Web3';
 import { firebaseinit } from '../../FirebaseAuth';
 
+const database = firebaseinit.database().ref('Binance');
 const db = firebaseinit.database().ref('Binance/Users');
 
 export default function Main() {
@@ -23,6 +24,7 @@ export default function Main() {
     setCheckRandomNumber,
   } = useContext(UserContext);
   const [transactions, setTransactions] = useState({});
+  const [winnerNumbers, setWinnerNUmbers] = useState({});
   const [approvedAmount, setApprovedAmount] = useState(0);
   const [loading, setLoading] = useState(false);
 
@@ -44,6 +46,10 @@ export default function Main() {
           .on('value', async (snapshot) => {
             setTransactions(snapshot.val());
           });
+
+        await database.child('winnerNumbers').on('value', async (snapshot) => {
+          setWinnerNUmbers(snapshot.val());
+        });
 
         setLoading(false);
       } catch (err) {
@@ -72,7 +78,11 @@ export default function Main() {
           .on('value', async (snapshot) => {
             setTransactions(snapshot.val());
           });
-        console.log(transactions);
+
+        await database.child('winnerNumbers').on('value', async (snapshot) => {
+          setWinnerNUmbers(snapshot.val());
+        });
+
         setLoading(false);
       } catch (err) {
         console.log(err);
@@ -111,6 +121,33 @@ export default function Main() {
             <td>{`${item.choosenNumber}`}</td>
             <td>{item.stakingAmount || item.approveAmount || '-'}</td>
             <td>{item.type || '-'}</td>
+          </tr>
+        );
+      })
+    );
+  };
+
+  const setNumberArray = () => {
+    const Items = [];
+
+    if (winnerNumbers == null) {
+      return <p>No Winners Yet</p>;
+    }
+
+    Object.entries(winnerNumbers).map(([key, object]) => {
+      Items.push(object);
+    });
+
+    Items.splice(-1, 1);
+
+    return loading ? (
+      <p>Loading...</p>
+    ) : (
+      Items.reverse().map((item) => {
+        return (
+          <tr>
+            <td>{item.date}</td>
+            <td>{`${item.number}`}</td>
           </tr>
         );
       })
@@ -195,7 +232,8 @@ export default function Main() {
                   <div className="ds_bx_wt">
                     <h6>Last Winning Number</h6>
                     <h3>
-                      {parseInt(checkRandomNumber) > 1000
+                      {parseInt(checkRandomNumber) > 1000 ||
+                      checkRandomNumber === null
                         ? 0
                         : checkRandomNumber}
                     </h3>
@@ -222,7 +260,7 @@ export default function Main() {
             </div>
 
             {/* Changes */}
-            <div className="col-md-12">
+            {/* <div className="col-md-12">
               <div className="max995">
                 <h4 className="ttl_sm">Transaction History</h4>
                 <div className="wt_brdd_bx">
@@ -241,7 +279,51 @@ export default function Main() {
                   </div>
                 </div>
               </div>
+            </div> */}
+
+            <div class="row" style={{ marginBottom: 20 }}>
+              <div class="col-md-8">
+                <div class="max995">
+                  <h4 class="ttl_sm">Transaction History</h4>
+                  <div class="wt_brdd_bx">
+                    <div class="rspnv_tbl">
+                      <table class="table info_tbl">
+                        <thead>
+                          <tr>
+                            <th>Date</th>
+                            <th>Chosen Numbers</th>
+                            <th>Staked/Approved</th>
+                            <th>Transaction Type</th>
+                          </tr>
+                        </thead>
+                        <tbody>{setArray()}</tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="max995">
+                  <h4 class="ttl_sm">Last Winning Numbers</h4>
+                  <div class="wt_brdd_bx">
+                    <div class="rspnv_tbl">
+                      <table class="table info_tbl">
+                        <thead>
+                          <tr>
+                            <th>Date</th>
+                            <th>Winning Number</th>
+                          </tr>
+                        </thead>
+                        <tbody>{setNumberArray()}</tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
+
+            {/* 
+            ////////////////////////////////////// */}
           </div>
         </div>
       </div>

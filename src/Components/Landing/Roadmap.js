@@ -31,10 +31,7 @@ export default function Roadmap() {
                   &#8226; Platform Development (COMPLETE)
                 </p>
                 <p class="def_p mb-0">
-                  &#8226; Chainlink VRF integration (COMPLETE)
-                </p>
-                <p class="def_p mb-0">
-                  &#8226; Testnet Beta testing (COMPLETE)
+                  &#8226; Testnet Beta Testing (COMPLETE)
                 </p>
                 <p class="def_p mb-0">
                   &#8226; Mainnet Contract deployment (COMPLETE)
@@ -60,7 +57,8 @@ export default function Roadmap() {
                 <p class="def_p mb-0">&#8226; Coin Market Cap Listing</p>
                 <p class="def_p mb-0">&#8226; Application improvements</p>
                 <p class="def_p mb-0">
-                  &#8226; Trustless joint-staking mechanism
+                  &#8226; Trustless joint-staking mechanism to allow those with
+                  less than 100 $STOCH to stake alongside other small holders
                 </p>
 
                 {/* <p class="def_p mb-0">
@@ -82,15 +80,14 @@ export default function Roadmap() {
               euismod, rutrum sem sed, pretium diam. Cras urna urna ultrices utibus.</p> */}
 
                 <p class="def_p mb-0">
-                  &#8226; Development of the platform across multiple chains
+                  &#8226; Expansion of the platform to allow staking on the
+                  Ethereum Network
                 </p>
                 <p class="def_p mb-0">
-                  &#8226; Lending and borrowing facilities using $STOCH as
-                  collateral
+                  &#8226; Token Bridge between BSC Chain and Ethereum (and vice
+                  versa)
                 </p>
-                <p class="def_p mb-0">
-                  &#8226; Create new financial instruments
-                </p>
+                <p class="def_p mb-0">&#8226; Liquidity Rewards Programme</p>
               </div>
             </div>
 

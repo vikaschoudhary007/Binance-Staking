@@ -11,9 +11,9 @@ export default function Header() {
       <header className="header" id="header">
         <div className="container">
           <nav className="navbar navbar-expand-lg navbar-light">
-            <a className="navbar-brand" href="#">
+            <Link className="navbar-brand" to="/">
               <img src={logo} className="img-fluid" />
-            </a>
+            </Link>
             <button
               className="navbar-toggler"
               type="button"
@@ -64,7 +64,14 @@ export default function Header() {
                 </li>
               </ul>
               <div className="d-flex">
-                <Link to="/dashboard" className="btn btn_bfs">
+                <a
+                  href="https://exchange.pancakeswap.finance/#/swap?inputCurrency=0xb57A5BfF7141EC4a95a08c7321CB14fafD7952a8"
+                  target="_blank"
+                  className="btn btn_bfs me-2"
+                >
+                  Buy $STOCH
+                </a>
+                <Link to="/dashboard" className="btn btn_bfs me-2">
                   Launch App
                 </Link>
               </div>

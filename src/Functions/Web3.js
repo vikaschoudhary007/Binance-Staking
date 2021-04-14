@@ -163,9 +163,7 @@ const accountDetails = async (account, userData, setUserData, setLoading) => {
     });
 
     setLoading(false);
-  } catch (err) {
-    console.log(err);
-  }
+  } catch (err) {}
 };
 
 //////////// HANDLE CHOOSENUMBER FUNCTION OF GUESS CONTRACT ///////////////////
@@ -217,7 +215,6 @@ const chooseNumbers = async (
           .child('Transactions/count')
           .once('value', async (result) => {
             countValue = result.val();
-            console.log(countValue);
           });
       }
       await userdb
@@ -225,7 +222,6 @@ const chooseNumbers = async (
         .child('Transactions/count')
         .once('value', async (result) => {
           countValue = result.val();
-          console.log(countValue);
         });
 
       if (countValue === null) {
@@ -245,7 +241,6 @@ const chooseNumbers = async (
       //////////////////////////////
       await userdb.child(account).once('value', async (snapshot) => {
         const data = snapshot.val().SelectedArray;
-        console.log(data);
 
         if (data === undefined) {
           await userdb
@@ -368,7 +363,6 @@ const stakeTokens = async (
       setError(true);
       return;
     }
-    console.log(tokens);
     await guessContract.methods
       .stakeTokens(tokens)
       .send({ from: account })
@@ -404,7 +398,6 @@ const stakeTokens = async (
           .child('Transactions/count')
           .once('value', async (result) => {
             countValue = result.val();
-            console.log(countValue);
           });
       }
       await userdb
@@ -412,7 +405,6 @@ const stakeTokens = async (
         .child('Transactions/count')
         .once('value', async (result) => {
           countValue = result.val();
-          console.log(countValue);
         });
 
       if (countValue === null) {
@@ -475,7 +467,6 @@ const stakeTokens = async (
     });
     setValue(0);
     setModalShow(false);
-    console.log(err);
   }
 };
 
@@ -533,7 +524,6 @@ const unstakeTokens = async (guessContract, account) => {
 
     await userdb.once('value', async (snapshot) => {
       const temp = snapshot.val();
-      console.log('vikas', temp);
 
       let countValue;
       if (temp == null) {
@@ -546,7 +536,6 @@ const unstakeTokens = async (guessContract, account) => {
           .child('Transactions/count')
           .once('value', async (result) => {
             countValue = result.val();
-            console.log(countValue);
           });
       }
       await userdb
@@ -554,7 +543,6 @@ const unstakeTokens = async (guessContract, account) => {
         .child('Transactions/count')
         .once('value', async (result) => {
           countValue = result.val();
-          console.log(countValue);
         });
 
       if (countValue === null) {
@@ -567,7 +555,6 @@ const unstakeTokens = async (guessContract, account) => {
           .child('Transactions/count')
           .once('value', async (result) => {
             countValue = result.val();
-            console.log(countValue);
           });
       }
 
@@ -600,8 +587,6 @@ const unstakeTokens = async (guessContract, account) => {
             });
         });
     });
-
-    // window.location.reload();
   } catch (err) {
     Swal.fire({
       title: 'Oops! Transaction Failed',
@@ -657,7 +642,6 @@ const approveFunction = async (
 
     await userdb.once('value', async (snapshot) => {
       const temp = snapshot.val();
-      console.log('vikas', temp);
 
       let countValue;
       if (temp == null) {
@@ -670,7 +654,6 @@ const approveFunction = async (
           .child('Transactions/count')
           .once('value', async (result) => {
             countValue = result.val();
-            console.log(countValue);
           });
       }
       await userdb
@@ -678,7 +661,6 @@ const approveFunction = async (
         .child('Transactions/count')
         .once('value', async (result) => {
           countValue = result.val();
-          console.log(countValue);
         });
 
       if (countValue === null) {
@@ -691,7 +673,6 @@ const approveFunction = async (
           .child('Transactions/count')
           .once('value', async (result) => {
             countValue = result.val();
-            console.log(countValue);
           });
       }
 
@@ -933,7 +914,67 @@ const emitEveryWeekTokens = async (tokenContract, account) => {
       },
       buttonsStyling: false,
     });
-    console.log(err);
+  }
+};
+
+const pushWinnerNumber = async (
+  winnerNumber,
+  date,
+  setWinnerNumber,
+  setDate
+) => {
+  try {
+    if (winnerNumber === '' || date === '') {
+      return;
+    }
+
+    let countValue;
+    await db.child('winnerNumbers/count').once('value', async (snapshot) => {
+      countValue = snapshot.val();
+    });
+
+    if (countValue === null) {
+      await db.child('winnerNumbers').set({ count: 0 });
+
+      await db.child('winnerNumbers/count').once('value', async (snapshot) => {
+        countValue = snapshot.val();
+      });
+    }
+
+    await db
+      .child('winnerNumbers')
+      .child(countValue)
+      .set({ date: date, number: winnerNumber })
+      .then(async () => {
+        await db.child('winnerNumbers/count').set(countValue + 1);
+      })
+      .then(async () => {
+        await setWinnerNumber('');
+        await setDate('');
+        Swal.fire({
+          title: 'Added successfully',
+          showConfirmButton: true,
+          showCloseButton: false,
+          confirmButtonText: 'Close',
+          icon: 'success',
+          customClass: {
+            confirmButton: 'swal-button',
+          },
+          buttonsStyling: false,
+        });
+      });
+  } catch (err) {
+    Swal.fire({
+      title: 'Oops! Something went wrong',
+      showConfirmButton: true,
+      showCloseButton: false,
+      confirmButtonText: 'Close',
+      icon: 'error',
+      customClass: {
+        confirmButton: 'swal-button',
+      },
+      buttonsStyling: false,
+    });
   }
 };
 
@@ -951,4 +992,5 @@ export {
   guessRandomNumber,
   chooseWinner,
   emitEveryWeekTokens,
+  pushWinnerNumber,
 };
